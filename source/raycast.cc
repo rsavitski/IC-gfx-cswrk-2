@@ -77,13 +77,45 @@ int main(int argc, char** argv) {
 }
 
 // Render a color image of objects in a scene.
-void renderRGBImage(SceneParser &scene, Image &image) {
+void renderRGBImage(SceneParser &scene, Image &image) 
+{
+  // camera properties, object info and bg color
+  Group *objs = scene.getGroup();
+  Camera *camera = scene.getCamera();
+  Vec3f background = scene.getBackgroundColor();
 
-  // YOUR CODE HERE.
+  int imgW = image.getWidth();
+  int imgH = image.getHeight();
 
-  // iterate over x/y bins, spawn appropriate rays from generateRay() 
-  // see pdf for spawn eq
+  // iterate over x-y pixel bins, cast rays and push results into an image
+  for (int x=0; x < imgW; x++)
+  {
+    for (int y=0; y < imgH; y++)
+    {
+      // calculate pixel's normalised parameters
+      float x_indx = ((float) x)/imgW;
+      float y_indx = ((float) y)/imgH;
 
+      Hit hit;
+      bool intersect;
+
+      // spawn ray
+      Ray ray = camera->generateRay(Vec2f(x_indx, y_indx));
+  
+      // trace
+      intersect = objs->intersect(ray, hit);
+
+      if (intersect)
+      {
+        image.SetPixel(x, y, hit.getColor());
+      }
+      else
+      {
+        // no collisions -> background color
+        image.SetPixel(x, y, background);
+      }
+    }
+  }
 }
 
 // Render an image showing the depth of objects from the camera.
