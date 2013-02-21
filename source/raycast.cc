@@ -81,11 +81,17 @@ void renderRGBImage(SceneParser &scene, Image &image) {
 
   // YOUR CODE HERE.
 
+  // iterate over x/y bins, spawn appropriate rays from generateRay() 
+  // see pdf for spawn eq
+
 }
 
 // Render an image showing the depth of objects from the camera.
 void renderDepthImage(SceneParser &scene, Image &image) {
 
   // YOUR CODE HERE.
+
+  // near and far "clipping" planes
+  // normalise depth range to [0->1] ()
 
 }

@@ -1,17 +1,13 @@
 // Class for Sphere subclass of Object3D
 
-// Add any code you need here and in the corresponding .cc file.
-
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
 #include "raycast.h"
 
-class Sphere : public Object3D{
-
-
+class Sphere : public Object3D
+{
 public:
-
   // Default constructor.
   Sphere();
 
@@ -22,6 +18,9 @@ public:
   // class.
   virtual bool intersect(const Ray &r, Hit &h);
 
+private:
+	Vec3f centre;
+	float radius;
 };
 
 #endif /* SPHERE_H_ */

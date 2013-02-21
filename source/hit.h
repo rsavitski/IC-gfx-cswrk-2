@@ -26,6 +26,7 @@ private:
 
   // REPRESENTATION
   float t;
+  
   Vec3f color;
   //Material *material;
   //Vec3f normal;

@@ -1,0 +1,15 @@
+TODO:
+implementation for derived Sphere (from obj3d)
+implementation bits for group
+implement orthocam
+
+
+Provided:
+Hit class
+Ray class
+Scene parser
+
+
+
+----
+http://www.csee.umbc.edu/~olano/435f02/ray-sphere.html
