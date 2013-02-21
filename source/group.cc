@@ -1,20 +1,22 @@
 #include "raycast.h"
 
 // Constructor for a group of n objects.
-Group::Group(int n) {
-
+Group::Group(int n) 
+{
   this->_object = new Object3D*[n];
   this->_count  = n;
 }
 
 // Destructor.
-Group::~Group() {
-
-  if (this->_object == NULL) {
+Group::~Group() 
+{
+  if (this->_object == NULL) 
+  {
     return;
   }
 
-  for (int i = 0; i < this->_count; i++) {
+  for (int i = 0; i < this->_count; i++) 
+  {
     delete this->_object[i];
   }
 
@@ -22,14 +24,24 @@ Group::~Group() {
 }
 
 // Insert an object into the array.
-void Group::addObject(int index, Object3D *obj) {
-
-  // YOUR CODE HERE.
+void Group::addObject(int index, Object3D *obj) 
+{
+  _object[index] = obj;
 }
+
 
 bool Group::intersect(const Ray &r, Hit &h)
 {
+  bool foundBetterIntersect = false;
 
-  // YOUR CODE HERE.
-
+  // loop over all objects in the group and see if there is a better intersection
+  // better -> closer to camera and positive
+  for (int i=0; i<_count; i++)
+  {
+    if ((*_object[i]).intersect(r, h) == true)
+    {
+      foundBetterIntersect = true;
+    }
+  }
+  return foundBetterIntersect;
 }
