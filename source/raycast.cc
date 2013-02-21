@@ -84,8 +84,8 @@ void renderRGBImage(SceneParser &scene, Image &image)
   Camera *camera = scene.getCamera();
   Vec3f background = scene.getBackgroundColor();
 
-  int imgW = image.getWidth();
-  int imgH = image.getHeight();
+  int imgW = image.Width();
+  int imgH = image.Height();
 
   // iterate over x-y pixel bins, cast rays and push results into an image
   for (int x=0; x < imgW; x++)
@@ -96,8 +96,8 @@ void renderRGBImage(SceneParser &scene, Image &image)
       float x_indx = ((float) x)/imgW;
       float y_indx = ((float) y)/imgH;
 
-      Hit hit;
-      bool intersect;
+      Hit hit(std::numeric_limits<float>::infinity(), Vec3f(0,0,0));
+      bool intersect = false;
 
       // spawn ray
       Ray ray = camera->generateRay(Vec2f(x_indx, y_indx));
