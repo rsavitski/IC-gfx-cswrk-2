@@ -30,9 +30,7 @@ bool Sphere::intersect(const Ray &r, Hit &h)
 	Vec3f d = r.getDirection();
 	Vec3f pc = this->centre;
 	float rs = this->radius;
-
-	//float t1 = std::numeric_limits<float>::infinity();
-	//float t2 = std::numeric_limits<float>::infinity();
+	
 
 	float a = d.Dot3(d);
 	float b = (d*2).Dot3(p0-pc);
@@ -65,30 +63,21 @@ bool Sphere::intersect(const Ray &r, Hit &h)
 		float t = -1;
 
 		// if else block to find smallest positive intersection
-		if (t1 >= 0 && t2 >= 0)
-		{
-			t = (t1 < t2) ? t1 : t2;
-		}
-		else if (t1 >= 0 && t2 < 0)
-		{
-			t = t1;
-		}
-		else if (t1 < 0 && t2 >= 0)
-		{
-			t = t2;
-		}
-		else if (t1 < 0 && t2 < 0)
-		{
-			// keep t at default -ve
-		}
+		if (t1 < 0) t1 = std::numeric_limits<float>::infinity();
+		if (t2 < 0) t2 = std::numeric_limits<float>::infinity();
+
+		t = (t1 < t2) ? t1 : t2;
+
+		if (t == std::numeric_limits<float>::infinity())
+			return false;
 
 		// update if better and +ve
-		if (t > 0 && t < h.getT()) 
+		if (t < h.getT()) 
 		{
 			h.set(t, this->_color);
 			return true;
 		}
 
-		return false; // do not count negative/worse intersects
+		return false; // do not count worse intersects
 	}
 }
