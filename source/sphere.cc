@@ -1,12 +1,12 @@
 #include "raycast.h"
 
 Sphere::Sphere() 
-: centre(0,0), radius(1), color(0,0,0)
+: Object3D(Vec3f()), centre(Vec3f()), radius(1) 
 {}
 
 
 Sphere::Sphere(Vec3f centre, float radius, Vec3f color) 
-: centre(centre), radius(radius), color(color)
+: Object3D(color), centre(centre), radius(radius) 
 {}
 
 
@@ -18,25 +18,25 @@ bool Sphere::intersect(const Ray &r, Hit &h)
 	// ray.origin = p0
 	// ray.direction = d
 	// this->centre = pc
-	// this->radius = r
+	// this->radius = rs
 
 	// at^2 + bt + c = 0
 
 	// a = d.d
 	// b = 2d.(p0-pc)
-	// c = (p0-pc).(p0-pc) - r^2
+	// c = (p0-pc).(p0-pc) - rs^2
 
 	Vec3f p0 = r.getOrigin();
 	Vec3f d = r.getDirection();
 	Vec3f pc = this->centre;
-	float r = this->radius;
+	float rs = this->radius;
 
 	//float t1 = std::numeric_limits<float>::infinity();
 	//float t2 = std::numeric_limits<float>::infinity();
 
 	float a = d.Dot3(d);
 	float b = (d*2).Dot3(p0-pc);
-	float c = (p0-pc).dot3(p0-pc) - r*r;
+	float c = (p0-pc).Dot3(p0-pc) - rs*rs;
 
 	float det = b*b-4*a*c;
 
@@ -44,7 +44,7 @@ bool Sphere::intersect(const Ray &r, Hit &h)
 	{
 		return false;
 	}
-	else if (det = 0)	// tangental intersection
+	else if (det == 0)	// tangental intersection
 	{
 		float t = -b/(2*a);
 
