@@ -4,6 +4,9 @@
 OrthographicCamera::OrthographicCamera(Vec3f centre, Vec3f direction, Vec3f up, float size)
 : size(size), centre(centre), direction(direction)  
 {
+	//cout << "provided up: " << up << endl;
+	//cout << "provided dir: " << direction << endl;
+	
 	// raw up vector, might need to be normalised and orthogonalised
 	this->up = up;
 
@@ -15,19 +18,21 @@ OrthographicCamera::OrthographicCamera(Vec3f centre, Vec3f direction, Vec3f up, 
 	if (!dotProd) // up vector already orthogonal to direction
 	{
 		cout << "Already orthogonal up vector case" << endl;
-		
+
 		Vec3f::Cross3(this->horizontal, this->direction, this->up);
 	}
 	else
 	{
 		// reconstruct proper up vector (orthogonal to direction and horizontal)
-		Vec3f::Cross3(this->up, this->direction, this->horizontal);
+		Vec3f::Cross3(this->up, this->horizontal, this->direction);
 	}
 
 	// normalise vectors
 	this->direction.Normalize();
 	this->horizontal.Normalize();
 	this->up.Normalize();
+
+	//cout << this->up << endl;
 }
 
 
