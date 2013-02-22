@@ -119,11 +119,59 @@ void renderRGBImage(SceneParser &scene, Image &image)
 }
 
 // Render an image showing the depth of objects from the camera.
-void renderDepthImage(SceneParser &scene, Image &image) {
+void renderDepthImage(SceneParser &scene, Image &image) 
+{
+  // camera properties and object info
+  Group *objs = scene.getGroup();
+  Camera *camera = scene.getCamera();
 
-  // YOUR CODE HERE.
+  int imgW = image.Width();
+  int imgH = image.Height();
+  
+  // iterate over x-y pixel bins, cast rays and push results into an image
+  for (int x=0; x < imgW; x++)
+  {
+    for (int y=0; y < imgH; y++)
+    {
+      // calculate pixel's normalised parameters
+      float x_indx = ((float) x)/imgW;
+      float y_indx = ((float) y)/imgH;
 
-  // near and far "clipping" planes
-  // normalise depth range to [0->1] ()
+      Hit hit(std::numeric_limits<float>::infinity(), Vec3f(0,0,0));
+      bool intersect = false;
 
+      // spawn ray
+      Ray ray = camera->generateRay(Vec2f(x_indx, y_indx));
+  
+      // trace
+      intersect = objs->intersect(ray, hit);
+
+      if (intersect)
+      {
+        float t = hit.getT();
+        float intensity = 0;
+
+        if (t <= _depthMin)
+        {
+          intensity = 1; // full intensity for channel (-> white)
+        }
+        else if (t >= _depthMax)
+        {
+          intensity = 0; // (-> black)
+        }
+        else
+        {
+          intensity = (_depthMax - t)/(_depthMax - _depthMin); // ratio (distance to far plane)/(depth range of image)
+        }
+
+        image.SetPixel(x, y, Vec3f(intensity,intensity,intensity));
+      }
+      else
+      {
+        // no collisions -> black
+        image.SetPixel(x, y, Vec3f(0,0,0));
+      }
+    }
+  }
 }
+
