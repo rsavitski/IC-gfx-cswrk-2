@@ -2,11 +2,32 @@
 
 // Constructor with parameters.
 OrthographicCamera::OrthographicCamera(Vec3f centre, Vec3f direction, Vec3f up, float size)
-: centre(centre), direction(direction), size(size) 
+: size(size), centre(centre), direction(direction)  
 {
+	// raw up vector, might need to be normalised and orthogonalised
+	this->up = up;
+
+	// construct horizontal vector, in xy plane of camera
+	Vec3f::Cross3(this->horizontal, this->direction, this->up);
+
+	// orthogonalise up vector if needed
+	float dotProd = this->direction.Dot3(up);
+	if (!dotProd) // up vector already orthogonal to direction
+	{
+		cout << "Already orthogonal up vector case" << endl;
+		
+		Vec3f::Cross3(this->horizontal, this->direction, this->up);
+	}
+	else
+	{
+		// reconstruct proper up vector (orthogonal to direction and horizontal)
+		Vec3f::Cross3(this->up, this->direction, this->horizontal);
+	}
+
+	// normalise vectors
 	this->direction.Normalize();
-
-
+	this->horizontal.Normalize();
+	this->up.Normalize();
 }
 
 
